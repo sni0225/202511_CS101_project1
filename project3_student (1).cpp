@@ -47,51 +47,71 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
     vector<int>neg_count(vec_size);
     vector<int>total(vec_size);
         
-    for(size_t count = 0; count < tweets.size(); count++){						//loop through rows of tweets vector 
+    for(size_t row = 0; row < tweets.size(); row++){						//loop through rows of "tweets" vector 
     	
-    	for(size_t i = 0; i < senators.size(); i++){							//loop through senators vector to check if name match
+    	cout << "Row " << row << " : ";
+    	
+		//possible opti: compare twitter id instead, maybe more efficient thyan comparing string?
+    	for(size_t i = 0; i < senators.size(); i++){							//loop through "senators" vector to check if name match
     		
-    		//possible opti: compare twitter id instead, maybe more efficient thyan comparing string?
-    		if(tweets[count][3] == senators[i]){			//if senator name matches							
+    		if(tweets[row][3] == senators[i]){			//if senator name matches							
     			
-    			stringstream ss(tweets[count][4]);
-    			string word;
+    			
+    			stringstream ss(tweets[row][4]);
+    			string word, stem;
     			while(ss >> word){
     				total[i]++;				//increment total word count for corresponding senator(i)
-    			
-    				string stem = stemString(word);
+    				stem = stemString(word);
     				
     				for(size_t i = 0; i < pos_list.size(); i++){		//loop through pos_list to check for match
+    					//something wrong with this block...
+    					/*
     					if(stem == pos_list[i]){
-    						pos_count[i]++;
+							pos_count[i]++;
     					}
+    					*/
     				}
     				
+    				
+    				
+    				
+					/*
     				for(size_t i = 0; i < neg_list.size(); i++){		//loop through neg_list to check for match
     					if(stem == neg_list[i]){
     						neg_count[i]++;
+    						break;
     					}
     				}
     				
+    				
+    				
+    				
+    				*/
     			}
-								
+			
     		}
+
     		
     	}
+    	cout << endl;
     }
     
     //print statements for debugging
-    for(size_t idx = 0; idx < pos_count.size(); idx++){
-    	cout << pos_count[idx] << " ";
+    for(size_t idx = 0; idx < total.size(); idx++){
+    	cout << total[idx] << " ";
     }
     cout << endl;
-
+    
+    /*
+    
     //print percentage
     cout << fixed << right << setw(15) << "Senator" << setw(15) << "Positive %" << setw(15) << "Negative %" << endl;
     //loop through each senator and print
     for(size_t idx = 0; idx < senators.size(); idx++){
         //print: name; positive/total; negative/total
+    
     }
+    */
 
 }
 
@@ -177,7 +197,7 @@ int main()
     
     //printing "senators" to make sure it works
     for(size_t idx = 0; idx < senators.size(); idx++){
-    	cout << senators[idx] << " ";
+    	cout << senators[idx] << endl;
     }
     cout << endl;
     
@@ -187,11 +207,11 @@ int main()
 
     /*
     //example: loop to print tweets
-    for(size_t idx = 0; idx < tweets.size(); idx++){
-    	cout << tweets[idx][4] << endl;
+    for(size_t row = 0; row < 5; row++){
+    	cout << tweets[row][4] << endl;
 
     	//splitting into words
-    	stringstream ss(tweets[idx][4]);
+    	stringstream ss(tweets[row][4]);
 		string word;
 		while (ss >> word){
 			//cout << word << endl;
@@ -199,6 +219,7 @@ int main()
 			cout << stemString(word) << " ";
 			// compare the word to words in positive and negative words vectors.
 			}
-    */
+   
     }
-
+    */
+}
