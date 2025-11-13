@@ -27,7 +27,7 @@ vector<string> senator_names(const vector<vector<string>>& input){
         }
 
         if(!isInVec){
-            senator_name.push_back();                       //if senator name is unique, push back to the vector
+            senator_name.push_back(input[idx][3]);                       //if senator name is unique, push back to the vector
         }
 
     }
