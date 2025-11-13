@@ -38,6 +38,14 @@ vector<string> senator_names(const vector<vector<string>>& input){
 //to do 2: Create a function that takes the 2D tweets vector, 1D senator name vector, positive
 //words vector and negative words vector as parameters and calculates and prints the positive
 //and negative words percentage for the parameter senator name.
+void calc_percent(vector<vector<string>> tweets, vector<string> senators, vector<string> pos_list, vector<string> neg_list);
+
+void calc_percent(vector<vector<string>> tweets, vector<string> senators, vector<string> pos_list, vector<string> neg_list){
+    
+
+}
+
+
 
 //name:  read_tweets_csv_file()
 //argument: none
