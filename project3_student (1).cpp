@@ -12,6 +12,28 @@ vector<string> readEmotionFile(string path);		//prototypr for readEmotionFile()
 
 //to do 1: Create a function that takes the 2D tweets vector as parameter, creates a 1D string
 //vector that includes the unique names of the senators and returns it.
+vector<string> senator_names(const vector<vector<string>>& input);
+
+vector<string> senator_names(const vector<vector<string>>& input){
+
+    vector<string> senator_names;                           //initialized without size
+
+    for(size_t idx = 0; idx < input.size(); idx++){         //loop through rows of the input matrix
+        bool isInVec = false;
+        for(size_t i = 0; i < senator_names.size(); i++){   //loop through the vector of unique senator names
+            if(input[idx][3] == senator_names[i]){
+                isInVec = true;
+            }
+        }
+
+        if(!isInVec){
+            senator_name.push_back();                       //if senator name is unique, push back to the vector
+        }
+
+    }
+    return senator_names;
+}
+
 
 //to do 2: Create a function that takes the 2D tweets vector, 1D senator name vector, positive
 //words vector and negative words vector as parameters and calculates and prints the positive
