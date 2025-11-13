@@ -27,7 +27,7 @@ vector<string> senator_names(const vector<vector<string>>& input){
         }
 
         if(!isInVec){
-            senator_name.push_back(input[idx][3]);                       //if senator name is unique, push back to the vector
+            senator_names.push_back(input[idx][3]);                       //if senator name is unique, push back to the vector
         }
 
     }
@@ -42,17 +42,54 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
 
 void calc_percent(const vector<vector<string>>& tweets, const vector<string>& senators, const vector<string>& pos_list, const vector<string>& neg_list){
     //declarations
-        //store count and stuff in a new vector maybe? corresponding to senator names vector
-        //one for positive one for negative
-        //and one for total word count
-
-    //count words??
-        //count each senator separately; use if(==) to check?
+    size_t vec_size = senators.size();
+    vector<int>pos_count(vec_size);
+    vector<int>neg_count(vec_size);
+    vector<int>total(vec_size);
+        
+    for(size_t count = 0; count < tweets.size(); count++){						//loop through rows of tweets vector 
+    	
+    	for(size_t i = 0; i < senators.size(); i++){							//loop through senators vector to check if name match
+    		
+    		//possible opti: compare twitter id instead, maybe more efficient thyan comparing string?
+    		if(tweets[count][3] == senators[i]){			//if senator name matches							
+    			
+    			stringstream ss(tweets[count][4]);
+    			string word;
+    			while(ss >> word){
+    				total[i]++;				//increment total word count for corresponding senator(i)
+    			
+    				string stem = stemString(word);
+    				
+    				for(size_t i = 0; i < pos_list.size(); i++){		//loop through pos_list to check for match
+    					if(stem == pos_list[i]){
+    						pos_count[i]++;
+    					}
+    				}
+    				
+    				for(size_t i = 0; i < neg_list.size(); i++){		//loop through neg_list to check for match
+    					if(stem == neg_list[i]){
+    						neg_count[i]++;
+    					}
+    				}
+    				
+    			}
+								
+    		}
+    		
+    	}
+    }
+    
+    //print statements for debugging
+    for(size_t idx = 0; idx < pos_count.size(); idx++){
+    	cout << pos_count[idx] << " ";
+    }
+    cout << endl;
 
     //print percentage
-    cout << fixed << right << setw(15) << "Senator" << setw(10) << "Positive %" << setw(10) << "Negative %" << endl;
+    cout << fixed << right << setw(15) << "Senator" << setw(15) << "Positive %" << setw(15) << "Negative %" << endl;
     //loop through each senator and print
-    for(size_t idx = 0; idx < senators.size(); i++){
+    for(size_t idx = 0; idx < senators.size(); idx++){
         //print: name; positive/total; negative/total
     }
 
@@ -67,7 +104,7 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
 //data from tweets.csv and returns it. Each row in the 2D vector contains tweet id, user id,
 //datetime, senator name and tweet text.
 
-vector<vector-<string>> read_tweets_csv_file()
+vector<vector<string>> read_tweets_csv_file()
 {
     vector<vector<string>> tweets;
     fstream fin;
@@ -91,7 +128,7 @@ vector<vector-<string>> read_tweets_csv_file()
     {
 
 
-        cout <<rowV[3] << " " <<  rowV[4] << endl;
+        //cout <<rowV[3] << " " <<  rowV[4] << endl;
 
     }
 
@@ -136,7 +173,14 @@ int main()
     //declare a vector for senator names
     //call senator_names to create a vector of senator names
     vector<string> senators;
-    senators = senator_names(tweets);       //does this work?
+    senators = senator_names(tweets);       
+    
+    //printing "senators" to make sure it works
+    for(size_t idx = 0; idx < senators.size(); idx++){
+    	cout << senators[idx] << " ";
+    }
+    cout << endl;
+    
 
     //call the big boi to print things
     calc_percent(tweets, senators, pos_words, neg_words);
@@ -158,4 +202,3 @@ int main()
     */
     }
 
-}
