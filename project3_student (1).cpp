@@ -38,10 +38,23 @@ vector<string> senator_names(const vector<vector<string>>& input){
 //to do 2: Create a function that takes the 2D tweets vector, 1D senator name vector, positive
 //words vector and negative words vector as parameters and calculates and prints the positive
 //and negative words percentage for the parameter senator name.
-void calc_percent(vector<vector<string>> tweets, vector<string> senators, vector<string> pos_list, vector<string> neg_list);
+void calc_percent(const vector<vector<string>>& tweets, const vector<string>& senators, const vector<string>& pos_list, const vector<string>& neg_list);
 
-void calc_percent(vector<vector<string>> tweets, vector<string> senators, vector<string> pos_list, vector<string> neg_list){
-    
+void calc_percent(const vector<vector<string>>& tweets, const vector<string>& senators, const vector<string>& pos_list, const vector<string>& neg_list){
+    //declarations
+        //store count and stuff in a new vector maybe? corresponding to senator names vector
+        //one for positive one for negative
+        //and one for total word count
+
+    //count words??
+        //count each senator separately; use if(==) to check?
+
+    //print percentage
+    cout << fixed << right << setw(15) << "Senator" << setw(10) << "Positive %" << setw(10) << "Negative %" << endl;
+    //loop through each senator and print
+    for(size_t idx = 0; idx < senators.size(); i++){
+        //print: name; positive/total; negative/total
+    }
 
 }
 
@@ -120,13 +133,13 @@ int main()
     vector<string> pos_words = readEmotionFile("positive-words.txt");	//calls readEmotionFile() to create a string vector of positive words "pos_words"
     vector<string> neg_words = readEmotionFile("negative-words.txt");	//calls readEmotionFile() to create a string vector of negative words "neg_words"
 
-    //to do 1: Create a function that takes the 2D tweets vector as parameter, creates a 1D string
-    //vector that includes the unique names of the senators and returns it.
+    //declare a vector for senator names
+    //call senator_names to create a vector of senator names
+    vector<string> senators;
+    senators = senator_names(tweets);       //does this work?
 
-    //to do 2: Create a function that takes the 2D tweets vector, 1D senator name vector, positive
-    //words vector and negative words vector as parameters and calculates and prints the positive
-    //and negative words percentage for the parameter senator name.
-
+    //call the big boi to print things
+    calc_percent(tweets, senators, pos_words, neg_words);
 
     /*
     //example: loop to print tweets
