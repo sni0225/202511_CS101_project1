@@ -52,41 +52,36 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
     	cout << "Row " << row << " : ";
     	
 		//possible opti: compare twitter id instead, maybe more efficient thyan comparing string?
-    	for(size_t i = 0; i < senators.size(); i++){							//loop through "senators" vector to check if name match
+    	for(size_t sen = 0; sen < senators.size(); sen++){							//loop through "senators" vector to check if name match
     		
-    		if(tweets[row][3] == senators[i]){			//if senator name matches							
+    		if(tweets[row][3] == senators[sen]){			//if senator name matches							
     			
     			
     			stringstream ss(tweets[row][4]);
     			string word, stem;
     			while(ss >> word){
-    				total[i]++;				//increment total word count for corresponding senator(i)
+    				total[sen]++;				//increment total word count for corresponding senator(i)
     				stem = stemString(word);
+    				//cout << stem << " ";
     				
     				for(size_t i = 0; i < pos_list.size(); i++){		//loop through pos_list to check for match
-    					//something wrong with this block...
-    					/*
+    					
     					if(stem == pos_list[i]){
-							pos_count[i]++;
+							cout << stem << " ";
+							pos_count[sen]++;
     					}
-    					*/
+
     				}
     				
-    				
-    				
-    				
-					/*
-    				for(size_t i = 0; i < neg_list.size(); i++){		//loop through neg_list to check for match
+    				for(size_t i = 0; i < neg_list.size(); i++){		//loop through pos_list to check for match
+    					
     					if(stem == neg_list[i]){
-    						neg_count[i]++;
-    						break;
+							cout << stem << " ";
+							neg_count[sen]++;
     					}
+
     				}
     				
-    				
-    				
-    				
-    				*/
     			}
 			
     		}
@@ -101,6 +96,10 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
     	cout << total[idx] << " ";
     }
     cout << endl;
+    
+    for(size_t idx = 0; idx < pos_count.size(); idx++){
+    	cout << pos_count[idx] << " ";
+    }
     
     /*
     
