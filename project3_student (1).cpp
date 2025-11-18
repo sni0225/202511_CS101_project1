@@ -38,6 +38,21 @@ vector<string> senator_names(const vector<vector<string>>& input){
 //to do 2: Create a function that takes the 2D tweets vector, 1D senator name vector, positive
 //words vector and negative words vector as parameters and calculates and prints the positive
 //and negative words percentage for the parameter senator name.
+
+//stem_all: another function that converts words in pos_words and neg_words to their stems
+vector<string> stem_all(const vector<string>& unstemmed);
+
+vector<string> stem_all(const vector<string>& unstemmed){
+	
+	vector<string> stemmed(unstemmed.size());
+	
+	for(size_t idx = 0; idx < unstemmed.size(); idx++){
+		stemmed[idx] = stemString(unstemmed[idx]);
+	}
+	
+	return stemmed;
+}
+
 void calc_percent(const vector<vector<string>>& tweets, const vector<string>& senators, const vector<string>& pos_list, const vector<string>& neg_list);
 
 void calc_percent(const vector<vector<string>>& tweets, const vector<string>& senators, const vector<string>& pos_list, const vector<string>& neg_list){
@@ -46,6 +61,9 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
     vector<int>pos_count(vec_size);
     vector<int>neg_count(vec_size);
     vector<int>total(vec_size);
+    
+    vector<string> pos_stem = stem_all(pos_list);
+    vector<string> neg_stem = stem_all(neg_list);
         
     for(size_t row = 0; row < tweets.size(); row++){						//loop through rows of "tweets" vector 
     	
@@ -64,18 +82,18 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
     				stem = stemString(word);
     				//cout << stem << " ";
     				
-    				for(size_t i = 0; i < pos_list.size(); i++){		//loop through pos_list to check for match
+    				for(size_t i = 0; i < pos_stem.size(); i++){		//loop through pos_list to check for match
     					
-    					if(stem == pos_list[i]){
+    					if(stem == pos_stem[i]){
 							cout << stem << " ";
 							pos_count[sen]++;
     					}
 
     				}
     				
-    				for(size_t i = 0; i < neg_list.size(); i++){		//loop through pos_list to check for match
+    				for(size_t i = 0; i < neg_stem.size(); i++){		//loop through pos_list to check for match
     					
-    					if(stem == neg_list[i]){
+    					if(stem == neg_stem[i]){
 							cout << stem << " ";
 							neg_count[sen]++;
     					}
@@ -100,17 +118,15 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
     for(size_t idx = 0; idx < pos_count.size(); idx++){
     	cout << pos_count[idx] << " ";
     }
-    
-    /*
+    cout << endl;
     
     //print percentage
-    cout << fixed << right << setw(15) << "Senator" << setw(15) << "Positive %" << setw(15) << "Negative %" << endl;
+    cout << fixed << right << setw(20) << "Senator" << setw(15) << "Positive %" << setw(15) << "Negative %" << endl;
     //loop through each senator and print
     for(size_t idx = 0; idx < senators.size(); idx++){
         //print: name; positive/total; negative/total
-    
+        cout << setw(20) << senators[idx] << setw(15) << 100.00 * pos_count[idx] / total[idx] << setw(15) << 100.00 * neg_count[idx] / total[idx] << endl;
     }
-    */
 
 }
 
