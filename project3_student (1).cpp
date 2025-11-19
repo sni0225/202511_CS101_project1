@@ -53,6 +53,35 @@ vector<string> stem_all(const vector<string>& unstemmed){
 	return stemmed;
 }
 
+//remove_dupe: another function to help remove duplicates in pos_words and neg_words
+vector<string> remove_dupe(const vector<string>& input);
+
+vector<string> remove_dupe(const vector<string>& input){
+	
+	vector<string> unique;
+	
+	for(size_t i = 0; i < input.size(); i++){		//loop through list of positive/negative words
+		
+		bool isInVec = false;
+		
+		for(size_t j = 0; j < unique.size(); j++){	//loop through vector of unique words found
+			
+			if(input[i] == unique[j]){
+				isInVec = true;
+			}
+			
+		}
+		
+		if(!isInVec){
+			unique.push_back(input[i]);
+		}
+		
+	}
+	
+	return unique;
+	
+}
+
 void calc_percent(const vector<vector<string>>& tweets, const vector<string>& senators, const vector<string>& pos_list, const vector<string>& neg_list);
 
 void calc_percent(const vector<vector<string>>& tweets, const vector<string>& senators, const vector<string>& pos_list, const vector<string>& neg_list){
@@ -62,8 +91,8 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
     vector<int>neg_count(vec_size);
     vector<int>total(vec_size);
     
-    vector<string> pos_stem = stem_all(pos_list);
-    vector<string> neg_stem = stem_all(neg_list);
+    vector<string> pos_stem_unique = remove_dupe(stem_all(pos_list));
+    vector<string> neg_stem_unique = remove_dupe(stem_all(neg_list));
         
     for(size_t row = 0; row < tweets.size(); row++){						//loop through rows of "tweets" vector 
     	
@@ -82,18 +111,18 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
     				stem = stemString(word);
     				//cout << stem << " ";
     				
-    				for(size_t i = 0; i < pos_stem.size(); i++){		//loop through pos_list to check for match
+    				for(size_t i = 0; i < pos_stem_unique.size(); i++){		//loop through pos_list to check for match
     					
-    					if(stem == pos_stem[i]){
+    					if(stem == pos_stem_unique[i]){
 							cout << stem << " ";
 							pos_count[sen]++;
     					}
 
     				}
     				
-    				for(size_t i = 0; i < neg_stem.size(); i++){		//loop through pos_list to check for match
+    				for(size_t i = 0; i < neg_stem_unique.size(); i++){		//loop through pos_list to check for match
     					
-    					if(stem == neg_stem[i]){
+    					if(stem == neg_stem_unique[i]){
 							cout << stem << " ";
 							neg_count[sen]++;
     					}
