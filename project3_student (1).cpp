@@ -7,8 +7,78 @@
 #include <iomanip>
 using namespace std;
 
-vector<vector<string>> read_tweets_csv_file();		//prototype for read_tweets_csv()
-vector<string> readEmotionFile(string path);		//prototypr for readEmotionFile()
+//PROVIDED FUNCTIONS
+/*
+	NAME:  read_tweets_csv_file()
+	ARGUMENT: none
+	RETURNS: string vector matrix
+	PURPOSE: This function creates a two-dimensional string vector, fills it with tweet
+	data from tweets.csv and returns it. Each row in the 2D vector contains tweet id, user id,
+	datetime, senator name and tweet text.
+*/
+vector<vector<string>> read_tweets_csv_file();	
+
+vector<vector<string>> read_tweets_csv_file()
+{
+    vector<vector<string>> tweets;
+    fstream fin;
+    fin.open("tweets.csv", ios::in);
+    string line, word, temp;
+    vector<string> row;
+    getline(fin, line);
+    while (getline(fin, line))
+    {
+        row.clear();
+        stringstream s(line);
+        //cout << line << endl;
+        while (getline(s, word, '|')) {
+          row.push_back(word);
+        }
+        if(row.size() == 5)
+            tweets.push_back(row);
+    }
+
+	//commented out because we don't need
+    /*
+	for(auto & rowV : tweets)
+    {
+    	
+		
+        cout <<rowV[3] << " " <<  rowV[4] << endl;
+
+    }
+    */
+    cout << tweets.size() <<" tweets." << endl;
+
+    return tweets;
+
+}
+
+/*
+	NAME:  readEmotionFile()
+	ARGUMENT: string path
+	RETURNS: string vector
+	PURPOSE: This functions takes the name of the emotion word file (e.g.
+	positive-words.txt) and creates a one dimensional string vector filled with words from the
+	parameter file and returns it.
+*/
+vector<string> readEmotionFile(string path);
+
+vector<string> readEmotionFile(string path)
+{
+    vector<string> emotionWords;
+    string text;
+    fstream newfile;
+    newfile.open(path,ios::in);  // open a file to perform write operation using file object
+    if(newfile.is_open()){   //checking whether the file is open
+        string line;
+        while(getline(newfile, line)){ //read data from file object and put it into string.
+            emotionWords.push_back(line);
+        }
+        newfile.close(); //close the file object.
+    }
+    return emotionWords;
+}
 
 //TO DO 1: Create a function that takes the 2D tweets vector as parameter, creates a 1D string
 //vector that includes the unique names of the senators and returns it.
@@ -102,7 +172,7 @@ vector<string> remove_dupe(const vector<string>& input){
 	NAME: calc_percent()
 	ARGUMENTS: vector<vector<string>> tweets, vector<string> senators, vector<string> pos_list, vector<string> neg_list
 	RETURNS: void
-	PURPOSE: Create a function that takes the 2D tweets vector, 1D senator name vector, positive
+	PURPOSE: This function takes the 2D tweets vector, 1D senator name vector, positive
 	words vector and negative words vector as parameters and calculates and prints the positive
 	and negative words percentage for the parameter senator name.
 */
@@ -110,59 +180,53 @@ vector<string> remove_dupe(const vector<string>& input){
 void calc_percent(const vector<vector<string>>& tweets, const vector<string>& senators, const vector<string>& pos_list, const vector<string>& neg_list);
 
 void calc_percent(const vector<vector<string>>& tweets, const vector<string>& senators, const vector<string>& pos_list, const vector<string>& neg_list){
-    //declarations
-    size_t vec_size = senators.size();
-    vector<int>pos_count(vec_size);
-    vector<int>neg_count(vec_size);
-    vector<int>total(vec_size);
+	
+    size_t vec_size = senators.size();		//three vectors are declared with same size as senators, their index each corresponsing to a senator
+    vector<int>pos_count(vec_size);			//this integer vector keeps track of count of positive words for each senator
+    vector<int>neg_count(vec_size);			//this integer vector keeps track of count of negative words for each senator
+    vector<int>total(vec_size);				//this integer vector keeps track of count of total words for each senator
     
-    vector<string> pos_stem_unique = remove_dupe(stem_all(pos_list));
-    vector<string> neg_stem_unique = remove_dupe(stem_all(neg_list));
+    vector<string> pos_stem_unique = remove_dupe(stem_all(pos_list));		//vectors for lists of positive words and negative words are first turned to stems 
+    vector<string> neg_stem_unique = remove_dupe(stem_all(neg_list));		//and the duplicates in the list are removed
         
     for(size_t row = 0; row < tweets.size(); row++){						//loop through rows of "tweets" vector 
     	
-    	cout << "Row " << row << " : ";
+    	//cout << "Row " << row << " : ";		//print line for debugging
     	
-		//possible opti: compare twitter id instead, maybe more efficient thyan comparing string?
-    	for(size_t sen = 0; sen < senators.size(); sen++){							//loop through "senators" vector to check if name match
+		//possible opti: compare twitter id instead, maybe more efficient than comparing string?
+    	for(size_t sen = 0; sen < senators.size(); sen++){					//loop through "senators" vector to check if name match
     		
     		if(tweets[row][3] == senators[sen]){			//if senator name matches							
     			
-    			
-    			stringstream ss(tweets[row][4]);
-    			string word, stem;
-    			while(ss >> word){
-    				total[sen]++;				//increment total word count for corresponding senator(i)
-    				stem = stemString(word);
-    				//cout << stem << " ";
+    			stringstream ss(tweets[row][4]);			//convert tweet text into a string stream
+    			string word, stem;				
+    			while(ss >> word){				
+    				total[sen]++;				//increment total word count for corresponding senator[sen]
+    				stem = stemString(word);	//word is converted to stem
     				
-    				for(size_t i = 0; i < pos_stem_unique.size(); i++){		//loop through pos_list to check for match
+    				for(size_t i = 0; i < pos_stem_unique.size(); i++){		//loop through processed pos_list to check for match
     					
     					if(stem == pos_stem_unique[i]){
-							cout << stem << " ";
-							pos_count[sen]++;
+							//cout << stem << " ";		//print line for debugging
+							pos_count[sen]++;			//pos_count for corresponding senator is incremented
     					}
 
     				}
-    				
-    				for(size_t i = 0; i < neg_stem_unique.size(); i++){		//loop through pos_list to check for match
+    				for(size_t i = 0; i < neg_stem_unique.size(); i++){		//loop through processed neg_list to check for match
     					
     					if(stem == neg_stem_unique[i]){
-							cout << stem << " ";
-							neg_count[sen]++;
+							//cout << stem << " ";		//print line for debugging
+							neg_count[sen]++;			//neg_count for corresponding senator is incremented
     					}
 
     				}
-    				
     			}
-			
     		}
-
-    		
     	}
-    	cout << endl;
+    	//cout << endl;	//print line for debugging
     }
     
+    /*
     //print statements for debugging
     for(size_t idx = 0; idx < total.size(); idx++){
     	cout << total[idx] << " ";
@@ -173,120 +237,35 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
     	cout << pos_count[idx] << " ";
     }
     cout << endl;
+    */
     
-    //print percentage
+    //print heading
     cout << fixed << right << setw(20) << "Senator" << setw(15) << "Positive %" << setw(15) << "Negative %" << endl;
-    //loop through each senator and print
-    for(size_t idx = 0; idx < senators.size(); idx++){
+    for(size_t idx = 0; idx < senators.size(); idx++){		//loop through each senator and print
         //print: name; positive/total; negative/total
+        //count is first multiplied with 100.00 to convert from int to double
         cout << setw(20) << senators[idx] << setw(15) << 100.00 * pos_count[idx] / total[idx] << setw(15) << 100.00 * neg_count[idx] / total[idx] << endl;
     }
-
-}
-
-//name:  read_tweets_csv_file()
-//argument: none
-//returns: string vector matrix
-//purpose: This function creates a two-dimensional string vector, fills it with tweet
-//data from tweets.csv and returns it. Each row in the 2D vector contains tweet id, user id,
-//datetime, senator name and tweet text.
-
-vector<vector<string>> read_tweets_csv_file()
-{
-    vector<vector<string>> tweets;
-    fstream fin;
-    fin.open("tweets.csv", ios::in);
-    string line, word, temp;
-    vector<string> row;
-    getline(fin, line);
-    while (getline(fin, line))
-    {
-        row.clear();
-        stringstream s(line);
-        //cout << line << endl;
-        while (getline(s, word, '|')) {
-          row.push_back(word);
-        }
-        if(row.size() == 5)
-            tweets.push_back(row);
-    }
-
-    for(auto & rowV : tweets)
-    {
-
-
-        //cout <<rowV[3] << " " <<  rowV[4] << endl;
-
-    }
-
-    cout << tweets.size() <<" tweets." << endl;
-
-    return tweets;
-
-}
-
-//name:  readEmotionFile()
-//argument: string path
-//returns: string vector
-//purpose: This functions takes the name of the emotion word file (e.g.
-//positive-words.txt) and creates a one dimensional string vector filled with words from the
-//parameter file and returns it.
-
-vector<string> readEmotionFile(string path)
-{
-    vector<string> emotionWords;
-    string text;
-    fstream newfile;
-    newfile.open(path,ios::in);  // open a file to perform write operation using file object
-    if(newfile.is_open()){   //checking whether the file is open
-        string line;
-        while(getline(newfile, line)){ //read data from file object and put it into string.
-            emotionWords.push_back(line);
-        }
-        newfile.close(); //close the file object.
-    }
-    return emotionWords;
 }
 
 
 
 int main()
 {
-
-    vector<vector<string>> tweets = read_tweets_csv_file();			//calls read_tweets_csv_file() to create a string vector matrix "tweets"
+    vector<vector<string>> tweets = read_tweets_csv_file();				//calls read_tweets_csv_file() to create a string vector matrix "tweets"
     vector<string> pos_words = readEmotionFile("positive-words.txt");	//calls readEmotionFile() to create a string vector of positive words "pos_words"
     vector<string> neg_words = readEmotionFile("negative-words.txt");	//calls readEmotionFile() to create a string vector of negative words "neg_words"
 
-    //declare a vector for senator names
-    //call senator_names to create a vector of senator names
-    vector<string> senators;
-    senators = senator_names(tweets);       
+    vector<string> senators;				//declare a vector for senator names
+    senators = senator_names(tweets);       //call senator_names() to create a vector of senator names
     
-    //printing "senators" to make sure it works
+    /*
+    //print statements for debugging
     for(size_t idx = 0; idx < senators.size(); idx++){
     	cout << senators[idx] << endl;
     }
     cout << endl;
-    
-
-    //call the big boi to print things
-    calc_percent(tweets, senators, pos_words, neg_words);
-
-    /*
-    //example: loop to print tweets
-    for(size_t row = 0; row < 5; row++){
-    	cout << tweets[row][4] << endl;
-
-    	//splitting into words
-    	stringstream ss(tweets[row][4]);
-		string word;
-		while (ss >> word){
-			//cout << word << endl;
-			//stemString() to convert to stem
-			cout << stemString(word) << " ";
-			// compare the word to words in positive and negative words vectors.
-			}
-   
-    }
     */
+
+    calc_percent(tweets, senators, pos_words, neg_words);		//call calc_percent to print things
 }
