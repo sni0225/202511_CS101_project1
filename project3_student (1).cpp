@@ -10,8 +10,17 @@ using namespace std;
 vector<vector<string>> read_tweets_csv_file();		//prototype for read_tweets_csv()
 vector<string> readEmotionFile(string path);		//prototypr for readEmotionFile()
 
-//to do 1: Create a function that takes the 2D tweets vector as parameter, creates a 1D string
+//TO DO 1: Create a function that takes the 2D tweets vector as parameter, creates a 1D string
 //vector that includes the unique names of the senators and returns it.
+
+/*
+	NAME: senator_names()
+	ARGUMENTS: vector<vector<string>> input
+	RETURNS: vector<string> senator_names
+	PURPOSE: This function takes a 2D string vector filled with tweet data,
+	and returns a 1D string vector of unique senator names.
+*/
+
 vector<string> senator_names(const vector<vector<string>>& input);
 
 vector<string> senator_names(const vector<vector<string>>& input){
@@ -27,19 +36,24 @@ vector<string> senator_names(const vector<vector<string>>& input){
         }
 
         if(!isInVec){
-            senator_names.push_back(input[idx][3]);                       //if senator name is unique, push back to the vector
+            senator_names.push_back(input[idx][3]);         //if senator name is unique, push back to the new vector
         }
-
     }
     return senator_names;
 }
 
 
-//to do 2: Create a function that takes the 2D tweets vector, 1D senator name vector, positive
+//TO DO 2: Create a function that takes the 2D tweets vector, 1D senator name vector, positive
 //words vector and negative words vector as parameters and calculates and prints the positive
 //and negative words percentage for the parameter senator name.
 
-//stem_all: another function that converts words in pos_words and neg_words to their stems
+/*
+	NAME: stem_all()
+	ARGUMENTS: vector<string> unstemmed
+	RETURNS: vector<string> stemmed
+	PURPOSE: This function takes a string vector,
+	and returns a string vector with all the elements converted to its stem.
+*/
 vector<string> stem_all(const vector<string>& unstemmed);
 
 vector<string> stem_all(const vector<string>& unstemmed){
@@ -53,7 +67,13 @@ vector<string> stem_all(const vector<string>& unstemmed){
 	return stemmed;
 }
 
-//remove_dupe: another function to help remove duplicates in pos_words and neg_words
+/*
+	NAME: remove_dupe()
+	ARGUMENTS: vector<string> input
+	RETURNS: vector<string> unique
+	PURPOSE: This function takes a string vector,
+	and returns a string vector with all the duplicate elements removed.
+*/
 vector<string> remove_dupe(const vector<string>& input);
 
 vector<string> remove_dupe(const vector<string>& input){
@@ -65,22 +85,27 @@ vector<string> remove_dupe(const vector<string>& input){
 		bool isInVec = false;
 		
 		for(size_t j = 0; j < unique.size(); j++){	//loop through vector of unique words found
-			
 			if(input[i] == unique[j]){
 				isInVec = true;
 			}
-			
 		}
 		
 		if(!isInVec){
-			unique.push_back(input[i]);
+			unique.push_back(input[i]);				//if a word is unique, push back onto new vector
 		}
 		
 	}
-	
 	return unique;
-	
 }
+
+/*
+	NAME: calc_percent()
+	ARGUMENTS: vector<vector<string>> tweets, vector<string> senators, vector<string> pos_list, vector<string> neg_list
+	RETURNS: void
+	PURPOSE: Create a function that takes the 2D tweets vector, 1D senator name vector, positive
+	words vector and negative words vector as parameters and calculates and prints the positive
+	and negative words percentage for the parameter senator name.
+*/
 
 void calc_percent(const vector<vector<string>>& tweets, const vector<string>& senators, const vector<string>& pos_list, const vector<string>& neg_list);
 
@@ -158,8 +183,6 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
     }
 
 }
-
-
 
 //name:  read_tweets_csv_file()
 //argument: none
