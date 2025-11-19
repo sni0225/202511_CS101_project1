@@ -80,7 +80,7 @@ vector<string> readEmotionFile(string path)
     return emotionWords;
 }
 
-//TO DO 1: Create a function that takes the 2D tweets vector as parameter, creates a 1D string
+//TO DO 1.1: Create a function that takes the 2D tweets vector as parameter, creates a 1D string
 //vector that includes the unique names of the senators and returns it.
 
 /*
@@ -113,7 +113,7 @@ vector<string> senator_names(const vector<vector<string>>& input){
 }
 
 
-//TO DO 2: Create a function that takes the 2D tweets vector, 1D senator name vector, positive
+//TO DO 1.2: Create a function that takes the 2D tweets vector, 1D senator name vector, positive
 //words vector and negative words vector as parameters and calculates and prints the positive
 //and negative words percentage for the parameter senator name.
 
@@ -248,7 +248,26 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
     }
 }
 
+//TO DO 2.1: Search for tweets between two dates for a specific senator and display the tweets.
 
+void search_by_date(const vector<vector<string>>& tweets, string senator, string d1, string s2);
+
+void search_by_date(const vector<vector<string>>& tweets, string senator, string d1, string s2){
+	
+	for(size_t row = 0, row < tweets.size(); row++){		//loop through the rows of tweet matrix
+		
+		if(tweets[row][3] == senator){		//if the senator name matches
+			
+			if(tweets[row][2] >= d1 && tweets[row][2] <= d2){
+				cout << "Date: " << tweets[row][2] << endl;
+				cout << "Tweet: " << tweets[row][4] << endl;
+			}
+			
+		}
+		
+	}
+	
+}
 
 int main()
 {
@@ -268,4 +287,11 @@ int main()
     */
 
     calc_percent(tweets, senators, pos_words, neg_words);		//call calc_percent to print things
+    
+    //PART II
+    string sen_name = "Dan Sullivan";
+    string date1 = "2022-04-15T23:15:43.000Z";
+    string date2 = "2022-04-25T22:29:32.000Z";
+    
+    search_by_date(sen_name, date1, date2);
 }
