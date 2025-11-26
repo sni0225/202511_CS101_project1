@@ -13,8 +13,8 @@ using namespace std;
 	ARGUMENT: none
 	RETURNS: string vector matrix
 	PURPOSE: This function creates a two-dimensional string vector, fills it with tweet
-	data from tweets.csv and returns it. Each row in the 2D vector contains tweet id, user id,
-	datetime, senator name and tweet text.
+	data from tweets.csv and returns it. Each row in the 2D vector contains [0]tweet id, [1]user id,
+	[2]datetime, [3]senator name and [4]tweet text.
 */
 vector<vector<string>> read_tweets_csv_file();	
 
@@ -193,7 +193,6 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
     	
     	//cout << "Row " << row << " : ";		//print line for debugging
     	
-		//possible opti: compare twitter id instead, maybe more efficient than comparing string?
     	for(size_t sen = 0; sen < senators.size(); sen++){					//loop through "senators" vector to check if name match
     		
     		if(tweets[row][3] == senators[sen]){			//if senator name matches							
@@ -250,15 +249,17 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
 
 //TO DO 2.1: Search for tweets between two dates for a specific senator and display the tweets.
 
-void search_by_date(const vector<vector<string>>& tweets, string senator, string d1, string s2);
+void search_by_date(const vector<vector<string>>& tweets, string senator, string d1, string d2);
 
-void search_by_date(const vector<vector<string>>& tweets, string senator, string d1, string s2){
+void search_by_date(const vector<vector<string>>& tweets, string senator, string d1, string d2){
 	
-	for(size_t row = 0, row < tweets.size(); row++){		//loop through the rows of tweet matrix
+	cout << "Tweets from " << senator << " from " << d1 << " to " << d2 << endl;
+	
+	for(size_t row = 0; row < tweets.size(); row++){		//loop through the rows of tweet matrix
 		
 		if(tweets[row][3] == senator){		//if the senator name matches
 			
-			if(tweets[row][2] >= d1 && tweets[row][2] <= d2){
+			if(tweets[row][2] >= d1 && tweets[row][2] <= d2){		//compare dates
 				cout << "Date: " << tweets[row][2] << endl;
 				cout << "Tweet: " << tweets[row][4] << endl;
 			}
@@ -275,23 +276,16 @@ int main()
     vector<string> pos_words = readEmotionFile("positive-words.txt");	//calls readEmotionFile() to create a string vector of positive words "pos_words"
     vector<string> neg_words = readEmotionFile("negative-words.txt");	//calls readEmotionFile() to create a string vector of negative words "neg_words"
 
+	//PART I
     vector<string> senators;				//declare a vector for senator names
     senators = senator_names(tweets);       //call senator_names() to create a vector of senator names
     
-    /*
-    //print statements for debugging
-    for(size_t idx = 0; idx < senators.size(); idx++){
-    	cout << senators[idx] << endl;
-    }
-    cout << endl;
-    */
-
     calc_percent(tweets, senators, pos_words, neg_words);		//call calc_percent to print things
-    
+
     //PART II
     string sen_name = "Dan Sullivan";
     string date1 = "2022-04-15T23:15:43.000Z";
     string date2 = "2022-04-25T22:29:32.000Z";
     
-    search_by_date(sen_name, date1, date2);
+    search_by_date(tweets, sen_name, date1, date2);
 }
