@@ -287,7 +287,70 @@ void search_by_date(const vector<vector<string>>& tweets, string senator, string
 	}else{
 		cout << "Found " << twt_count << " tweets from " << senator << " between " << d1 << " and " << d2  << "."<< endl;
 	}
+}
+
+//TO DO 2.3: Who is the most talkative senator in terms of number of tweets and average word count
+//per tweet?
+
+void yapper_by_twt(const vector<vector<string>>& tweets, const vector<string>& senators);
+
+void yapper_by_twt(const vector<vector<string>>& tweets, const vector<string>& senators){
 	
+	vector<int> twt_count(senators.size());		//integer vector that holds tweet count for each senator
+	
+	for(size_t row = 0; row < tweets.size(); row++){	//loop through rows of 2D tweets vector
+		
+		for(size_t sen = 0; sen < senators.size(); sen++){			//loop through the senator names vector
+			
+			if(tweets[row][3] == senators[sen]){		//if name matches
+				twt_count[sen]++;
+			}
+		}
+	}
+	
+	size_t largest = 0;
+	for(size_t idx = 1; idx < twt_count.size();idx++){	//loop through twt_count and compare
+		
+		if(twt_count[largest] < twt_count[idx]){
+			largest = idx;								//update idx 
+		}
+		
+	}
+	
+	cout << senators[largest] << " is the most talkative by number of tweets, with " << twt_count[largest] << " tweets." << endl;
+	
+}
+
+void yapper_by_word(const vector<vector<string>>& tweets, const vector<string>& senators);
+
+void yapper_by_word(const vector<vector<string>>& tweets, const vector<string>& senators){
+	
+	vector<int> twt_count(senators.size());		//integer vector that holds tweet count for each senator
+	
+	for(size_t row = 0; row < tweets.size(); row++){	//loop through rows of 2D tweets vector
+		
+		for(size_t sen = 0; sen < senators.size(); sen++){			//loop through the senator names vector
+			
+			if(tweets[row][3] == senators[sen]){		//if name matches
+				
+				for(){
+					
+				}
+				
+			}
+		}
+	}
+	
+	size_t largest = 0;
+	for(size_t idx = 1; idx < twt_count.size();idx++){	//loop through twt_count and compare
+		
+		if(twt_count[largest] < twt_count[idx]){
+			largest = idx;								//update idx 
+		}
+		
+	}
+	
+	cout << senators[largest] << " is the most talkative by number of tweets, with " << twt_count[largest] << " tweets." << endl;
 }
 
 int main()
@@ -300,13 +363,13 @@ int main()
     vector<string> senators;				//declare a vector for senator names
     senators = senator_names(tweets);       //call senator_names() to create a vector of senator names
     
-    calc_percent(tweets, senators, pos_words, neg_words);		//call calc_percent to print things
+    //calc_percent(tweets, senators, pos_words, neg_words);		//call calc_percent to print things
 
-    //PART II
+    //PART II-1
     string sen_name = "Dan Sullivan";
     string d1 = "2022-04-15";
     string d2 = "2022-04-25";
-    search_by_date(tweets, sen_name, d1, d2);
+    //search_by_date(tweets, sen_name, d1, d2);
     
     /*
     //alternative: user input search terms
@@ -320,4 +383,6 @@ int main()
     search_by_date(tweets, sen, date1, date2);
     */
     
+    //PART II-3
+    yapper_by_twt(tweets, senators);
 }
