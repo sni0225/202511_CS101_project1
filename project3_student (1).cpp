@@ -249,23 +249,43 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
 
 //TO DO 2.1: Search for tweets between two dates for a specific senator and display the tweets.
 
+/*
+	NAME: search_by_date()
+	ARGUMENTS: 2D string vector tweets, string senator, string d1, string d2
+	RETURNS: void
+	PURPOSE: This function takes the 2D tweets vector, a senator name string, and two dates
+	as strings as parameters and search for tweets between the two dates from the senator
+	and print the tweets. 
+*/
+
 void search_by_date(const vector<vector<string>>& tweets, string senator, string d1, string d2);
 
 void search_by_date(const vector<vector<string>>& tweets, string senator, string d1, string d2){
 	
-	cout << "Tweets from " << senator << " from " << d1 << " to " << d2 << endl;
+	bool isSenReal = false;
+	int twt_count = 0;
 	
 	for(size_t row = 0; row < tweets.size(); row++){		//loop through the rows of tweet matrix
 		
 		if(tweets[row][3] == senator){		//if the senator name matches
 			
-			if(tweets[row][2] >= d1 && tweets[row][2] <= d2){		//compare dates
-				cout << "Date: " << tweets[row][2] << endl;
+			isSenReal = true;
+			if(tweets[row][2].substr(0,10) >= d1 && tweets[row][2].substr(0,10) <= d2){		//compare dates
+				cout << "Date: " << tweets[row][2].substr(0,10) << endl;
 				cout << "Tweet: " << tweets[row][4] << endl;
+				twt_count++;
 			}
-			
 		}
-		
+	}
+	
+	if(!isSenReal){		//print message if senator is not in vector
+		cout << "Senator not found." << endl;
+	}
+	
+	if(twt_count == 0){		//if didn't find any
+		cout << "No tweet found." << endl; 
+	}else{
+		cout << "Found " << twt_count << " tweets from " << senator << " between " << d1 << " and " << d2  << "."<< endl;
 	}
 	
 }
@@ -284,8 +304,20 @@ int main()
 
     //PART II
     string sen_name = "Dan Sullivan";
-    string date1 = "2022-04-15T23:15:43.000Z";
-    string date2 = "2022-04-25T22:29:32.000Z";
+    string d1 = "2022-04-15";
+    string d2 = "2022-04-25";
+    search_by_date(tweets, sen_name, d1, d2);
     
-    search_by_date(tweets, sen_name, date1, date2);
+    /*
+    //alternative: user input search terms
+    string sen, date1, date2;
+    cout << "Enter senator name: ";
+    getline(cin, sen);
+    cout << "Enter starting date in YYYY-MM-DD: ";
+    cin >> date1;
+    cout << "Enter ending date in YYYY-MM-DD: ";
+    cin >> date2;
+    search_by_date(tweets, sen, date1, date2);
+    */
+    
 }
