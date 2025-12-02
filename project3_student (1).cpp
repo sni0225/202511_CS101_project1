@@ -292,6 +292,55 @@ void search_by_date(const vector<vector<string>>& tweets, string senator, string
 //TO DO 2.3: Who is the most talkative senator in terms of number of tweets and average word count
 //per tweet?
 
+void yapper(const vector<vector<string>>& tweets, const vector<string>& senators);
+
+void yapper(const vector<vector<string>>& tweets, const vector<string>& senators){
+
+	vector<int> twt_count(senators.size());		//integer vector that holds tweet count for each senator
+	vector<int> word_count(senators.size());		//integer vector that holds word count for each senator
+
+	for(size_t row = 0; row < tweets.size(); row++){	//loop through rows of 2D tweets vector
+
+		for(size_t sen = 0; sen < senators.size(); sen++){			//loop through the senator names vector
+
+			if(tweets[row][3] == senators[sen]){		//if name matches
+				twt_count[sen]++;
+				stringstream ss(tweets[row][4]);			//convert tweet text into a string stream
+    			string word;
+    			while(ss >> word){
+    				word_count[sen]++;				//increment total word count for corresponding senator
+    				}
+			}
+		}
+	}
+
+	//determine largest by tweet count
+	size_t largest = 0;
+	for(size_t idx = 1; idx < twt_count.size();idx++){	//loop through twt_count and compare
+
+		if(twt_count[largest] < twt_count[idx]){
+			largest = idx;								//update idx
+		}
+
+	}
+	cout << senators[largest] << " is the most talkative by number of tweets, with " << twt_count[largest] << " tweets." << endl;
+
+	//determine largest by average word count per tweet
+	largest = 0;
+	for(size_t idx = 0; idx < word_count.size();idx++){	//loop through word_count and compare
+
+		word_count[idx] /= twt_count[idx];
+		if(word_count[largest] < word_count[idx]){
+			largest = idx;								//update idx
+		}
+
+	}
+
+	cout << senators[largest] << " is the most talkative by average word count per tweet, with "
+		<< word_count[largest] << " words per tweet." << endl;
+
+}
+
 /*
 	NAME: yapper_by_twt()
 	ARGUMENTS: 2D string vector tweets, string vector senator
@@ -403,4 +452,5 @@ int main()
     //PART II-3
     yapper_by_twt(tweets, senators);
 	yapper_by_word(tweets, senators);
+	yapper(tweets, senators);
 }
