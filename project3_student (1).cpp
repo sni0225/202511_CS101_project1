@@ -16,7 +16,7 @@ using namespace std;
 	data from tweets.csv and returns it. Each row in the 2D vector contains [0]tweet id, [1]user id,
 	[2]datetime, [3]senator name and [4]tweet text.
 */
-vector<vector<string>> read_tweets_csv_file();	
+vector<vector<string>> read_tweets_csv_file();
 
 vector<vector<string>> read_tweets_csv_file()
 {
@@ -42,8 +42,8 @@ vector<vector<string>> read_tweets_csv_file()
     /*
 	for(auto & rowV : tweets)
     {
-    	
-		
+
+
         cout <<rowV[3] << " " <<  rowV[4] << endl;
 
     }
@@ -127,13 +127,13 @@ vector<string> senator_names(const vector<vector<string>>& input){
 vector<string> stem_all(const vector<string>& unstemmed);
 
 vector<string> stem_all(const vector<string>& unstemmed){
-	
+
 	vector<string> stemmed(unstemmed.size());
-	
+
 	for(size_t idx = 0; idx < unstemmed.size(); idx++){
 		stemmed[idx] = stemString(unstemmed[idx]);
 	}
-	
+
 	return stemmed;
 }
 
@@ -147,23 +147,23 @@ vector<string> stem_all(const vector<string>& unstemmed){
 vector<string> remove_dupe(const vector<string>& input);
 
 vector<string> remove_dupe(const vector<string>& input){
-	
+
 	vector<string> unique;
-	
+
 	for(size_t i = 0; i < input.size(); i++){		//loop through list of positive/negative words
-		
+
 		bool isInVec = false;
-		
+
 		for(size_t j = 0; j < unique.size(); j++){	//loop through vector of unique words found
 			if(input[i] == unique[j]){
 				isInVec = true;
 			}
 		}
-		
+
 		if(!isInVec){
 			unique.push_back(input[i]);				//if a word is unique, push back onto new vector
 		}
-		
+
 	}
 	return unique;
 }
@@ -180,31 +180,31 @@ vector<string> remove_dupe(const vector<string>& input){
 void calc_percent(const vector<vector<string>>& tweets, const vector<string>& senators, const vector<string>& pos_list, const vector<string>& neg_list);
 
 void calc_percent(const vector<vector<string>>& tweets, const vector<string>& senators, const vector<string>& pos_list, const vector<string>& neg_list){
-	
+
     size_t vec_size = senators.size();		//three vectors are declared with same size as senators, their index each corresponsing to a senator
     vector<int>pos_count(vec_size);			//this integer vector keeps track of count of positive words for each senator
     vector<int>neg_count(vec_size);			//this integer vector keeps track of count of negative words for each senator
     vector<int>total(vec_size);				//this integer vector keeps track of count of total words for each senator
-    
-    vector<string> pos_stem_unique = remove_dupe(stem_all(pos_list));		//vectors for lists of positive words and negative words are first turned to stems 
+
+    vector<string> pos_stem_unique = remove_dupe(stem_all(pos_list));		//vectors for lists of positive words and negative words are first turned to stems
     vector<string> neg_stem_unique = remove_dupe(stem_all(neg_list));		//and the duplicates in the list are removed
-        
-    for(size_t row = 0; row < tweets.size(); row++){						//loop through rows of "tweets" vector 
-    	
+
+    for(size_t row = 0; row < tweets.size(); row++){						//loop through rows of "tweets" vector
+
     	//cout << "Row " << row << " : ";		//print line for debugging
-    	
+
     	for(size_t sen = 0; sen < senators.size(); sen++){					//loop through "senators" vector to check if name match
-    		
-    		if(tweets[row][3] == senators[sen]){			//if senator name matches							
-    			
+
+    		if(tweets[row][3] == senators[sen]){			//if senator name matches
+
     			stringstream ss(tweets[row][4]);			//convert tweet text into a string stream
-    			string word, stem;				
-    			while(ss >> word){				
+    			string word, stem;
+    			while(ss >> word){
     				total[sen]++;				//increment total word count for corresponding senator[sen]
     				stem = stemString(word);	//word is converted to stem
-    				
+
     				for(size_t i = 0; i < pos_stem_unique.size(); i++){		//loop through processed pos_list to check for match
-    					
+
     					if(stem == pos_stem_unique[i]){
 							//cout << stem << " ";		//print line for debugging
 							pos_count[sen]++;			//pos_count for corresponding senator is incremented
@@ -212,7 +212,7 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
 
     				}
     				for(size_t i = 0; i < neg_stem_unique.size(); i++){		//loop through processed neg_list to check for match
-    					
+
     					if(stem == neg_stem_unique[i]){
 							//cout << stem << " ";		//print line for debugging
 							neg_count[sen]++;			//neg_count for corresponding senator is incremented
@@ -224,20 +224,20 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
     	}
     	//cout << endl;	//print line for debugging
     }
-    
+
     /*
     //print statements for debugging
     for(size_t idx = 0; idx < total.size(); idx++){
     	cout << total[idx] << " ";
     }
     cout << endl;
-    
+
     for(size_t idx = 0; idx < pos_count.size(); idx++){
     	cout << pos_count[idx] << " ";
     }
     cout << endl;
     */
-    
+
     //print heading
     cout << fixed << right << setw(20) << "Senator" << setw(15) << "Positive %" << setw(15) << "Negative %" << endl;
     for(size_t idx = 0; idx < senators.size(); idx++){		//loop through each senator and print
@@ -255,20 +255,20 @@ void calc_percent(const vector<vector<string>>& tweets, const vector<string>& se
 	RETURNS: void
 	PURPOSE: This function takes the 2D tweets vector, a senator name string, and two dates
 	as strings as parameters and search for tweets between the two dates from the senator
-	and print the tweets. 
+	and print the tweets.
 */
 
 void search_by_date(const vector<vector<string>>& tweets, string senator, string d1, string d2);
 
 void search_by_date(const vector<vector<string>>& tweets, string senator, string d1, string d2){
-	
+
 	bool isSenReal = false;
 	int twt_count = 0;
-	
+
 	for(size_t row = 0; row < tweets.size(); row++){		//loop through the rows of tweet matrix
-		
+
 		if(tweets[row][3] == senator){		//if the senator name matches
-			
+
 			isSenReal = true;
 			if(tweets[row][2].substr(0,10) >= d1 && tweets[row][2].substr(0,10) <= d2){		//compare dates
 				cout << "Date: " << tweets[row][2].substr(0,10) << endl;
@@ -277,13 +277,13 @@ void search_by_date(const vector<vector<string>>& tweets, string senator, string
 			}
 		}
 	}
-	
+
 	if(!isSenReal){		//print message if senator is not in vector
 		cout << "Senator not found." << endl;
 	}
-	
+
 	if(twt_count == 0){		//if didn't find any
-		cout << "No tweet found." << endl; 
+		cout << "No tweet found." << endl;
 	}else{
 		cout << "Found " << twt_count << " tweets from " << senator << " between " << d1 << " and " << d2  << "."<< endl;
 	}
@@ -292,65 +292,82 @@ void search_by_date(const vector<vector<string>>& tweets, string senator, string
 //TO DO 2.3: Who is the most talkative senator in terms of number of tweets and average word count
 //per tweet?
 
+/*
+	NAME: yapper_by_twt()
+	ARGUMENTS: 2D string vector tweets, string vector senator
+	RETURNS: void
+	PURPOSE: This function takes the 2D tweets vector and a string vector of senator names
+	as parameters and look for the most talkative senator based on the number of tweets.
+*/
+
 void yapper_by_twt(const vector<vector<string>>& tweets, const vector<string>& senators);
 
 void yapper_by_twt(const vector<vector<string>>& tweets, const vector<string>& senators){
-	
+
 	vector<int> twt_count(senators.size());		//integer vector that holds tweet count for each senator
-	
+
 	for(size_t row = 0; row < tweets.size(); row++){	//loop through rows of 2D tweets vector
-		
+
 		for(size_t sen = 0; sen < senators.size(); sen++){			//loop through the senator names vector
-			
+
 			if(tweets[row][3] == senators[sen]){		//if name matches
 				twt_count[sen]++;
 			}
 		}
 	}
-	
+
 	size_t largest = 0;
 	for(size_t idx = 1; idx < twt_count.size();idx++){	//loop through twt_count and compare
-		
+
 		if(twt_count[largest] < twt_count[idx]){
-			largest = idx;								//update idx 
+			largest = idx;								//update idx
 		}
-		
+
 	}
-	
+
 	cout << senators[largest] << " is the most talkative by number of tweets, with " << twt_count[largest] << " tweets." << endl;
-	
+
 }
+
+/*
+	NAME: yapper_by_word()
+	ARGUMENTS: 2D string vector tweets, string vector senator
+	RETURNS: void
+	PURPOSE: This function takes the 2D tweets vector and a string vector of senator names
+	as parameters and look for the most talkative senator based on the number of words.
+*/
 
 void yapper_by_word(const vector<vector<string>>& tweets, const vector<string>& senators);
 
 void yapper_by_word(const vector<vector<string>>& tweets, const vector<string>& senators){
-	
-	vector<int> twt_count(senators.size());		//integer vector that holds tweet count for each senator
-	
+
+	vector<int> word_count(senators.size());		//integer vector that holds word count for each senator
+
 	for(size_t row = 0; row < tweets.size(); row++){	//loop through rows of 2D tweets vector
-		
+
 		for(size_t sen = 0; sen < senators.size(); sen++){			//loop through the senator names vector
-			
+
 			if(tweets[row][3] == senators[sen]){		//if name matches
-				
-				for(){
-					
-				}
-				
+
+				stringstream ss(tweets[row][4]);			//convert tweet text into a string stream
+    			string word;
+    			while(ss >> word){
+    				word_count[sen]++;				//increment total word count for corresponding senator
+    				}
+    			}
 			}
 		}
-	}
-	
+
 	size_t largest = 0;
-	for(size_t idx = 1; idx < twt_count.size();idx++){	//loop through twt_count and compare
-		
-		if(twt_count[largest] < twt_count[idx]){
-			largest = idx;								//update idx 
+	for(size_t idx = 1; idx < word_count.size();idx++){	//loop through word_count and compare
+
+		if(word_count[largest] < word_count[idx]){
+			largest = idx;								//update idx
 		}
-		
+
 	}
-	
-	cout << senators[largest] << " is the most talkative by number of tweets, with " << twt_count[largest] << " tweets." << endl;
+
+	cout << senators[largest] << " is the most talkative by number of words, with " << word_count[largest] << " words." << endl;
 }
 
 int main()
@@ -362,7 +379,7 @@ int main()
 	//PART I
     vector<string> senators;				//declare a vector for senator names
     senators = senator_names(tweets);       //call senator_names() to create a vector of senator names
-    
+
     //calc_percent(tweets, senators, pos_words, neg_words);		//call calc_percent to print things
 
     //PART II-1
@@ -370,7 +387,7 @@ int main()
     string d1 = "2022-04-15";
     string d2 = "2022-04-25";
     //search_by_date(tweets, sen_name, d1, d2);
-    
+
     /*
     //alternative: user input search terms
     string sen, date1, date2;
@@ -382,7 +399,8 @@ int main()
     cin >> date2;
     search_by_date(tweets, sen, date1, date2);
     */
-    
+
     //PART II-3
     yapper_by_twt(tweets, senators);
+	yapper_by_word(tweets, senators);
 }
