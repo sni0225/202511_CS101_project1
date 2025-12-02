@@ -351,6 +351,21 @@ void yapper(const vector<vector<string>>& tweets, const vector<string>& senators
 
 }
 
+//TO DO 3: EXTRA CREDIT
+//idea: print a visual representation of a senator's tweeting frequency by month
+
+void freq_bar(vector<vector<string>> tweets, string senator);
+
+void freq_bar(vector<vector<string>> tweets, string senator){
+	//make a string vector of months?
+	//fixed range or user provide?
+	//maybe loop through tweets[row][2] to look for earliest and latest and generate month vector?
+
+	//loop through rows of tweets
+		//look for senator name match in tweets[3]
+			//loop through month vector to look for match in tweets[2]
+}
+
 int main()
 {
     vector<vector<string>> tweets = read_tweets_csv_file();				//calls read_tweets_csv_file() to create a string vector matrix "tweets"
