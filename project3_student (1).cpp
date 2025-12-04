@@ -354,32 +354,6 @@ void yapper(const vector<vector<string>>& tweets, const vector<string>& senators
 //TO DO 3: EXTRA CREDIT
 //idea: print a visual representation of a senator's tweeting frequency by month
 
-string find_start(vector<vector<string>> tweets, string senator);
-
-string find_start(vector<vector<string>> tweets, string senator){
-	for(size_t row = 0; row < tweets.size(); row++){
-
-		if (tweets[row][3] == senator){		//if senator name matches
-			return tweets[row][2].substr(0, 7);
-		}
-	}
-}
-
-string find_end(vector<vector<string>> tweets, string senator);
-
-string find_end(vector<vector<string>> tweets, string senator){
-	string end = "0000-00";
-	for(size_t row = 0; row < tweets.size(); row++){
-
-		if (tweets[row][3] == senator){		//if senator name matches
-			if(tweets[row][2] > end){
-				end = tweets[row][2];
-			}
-		}
-	}
-	return end.substr(0, 7);
-}
-
 vector<string> month_vec(vector<vector<string>> tweets, string senator);
 
 vector<string> month_vec(vector<vector<string>> tweets, string senator){
@@ -397,7 +371,6 @@ vector<string> month_vec(vector<vector<string>> tweets, string senator){
 			}
 			if(!isInVec){
 				months.push_back(curr);
-				cout << curr << " ";
 			}
 		}
 	}
@@ -407,22 +380,31 @@ vector<string> month_vec(vector<vector<string>> tweets, string senator){
 void freq_bar(vector<vector<string>> tweets, string senator);
 
 void freq_bar(vector<vector<string>> tweets, string senator){
-	//make a string vector of months?
-	//maybe loop through tweets[row][2] to look for earliest and latest and generate month vector?
 
-	for(size_t row = 0; row < tweets.size(); row++){
+	vector<string> months = month_vec(tweets, senator);
+	vector<int> twt_by_mon(months.size());
+	bool isFirst = true;
+
+	for(size_t row = 0; row < tweets.size(); row++){	//loop through rows of tweets
 
 		if (tweets[row][3] == senator){		//if senator name matches
-
+			for(size_t m = 0; m < months.size(); m++){		//loop through months for match
+				if(tweets[row][2].substr(0,7) == months[m]){
+					twt_by_mon[m]++;
+				}
+			}
 		}
-
 	}
 
+	cout << senator << "'s number of tweets by month: \n";
 
-
-	//loop through rows of tweets
-		//look for senator name match in tweets[3]
-			//loop through month vector to look for match in tweets[2]
+	for(size_t m = 0; m < months.size(); m++){
+		cout << months[m] << "\t";
+		for(int i = 0; i < twt_by_mon[m]; i++){
+			cout << "*";
+		}
+		cout << endl;
+	}
 }
 
 int main()
@@ -459,4 +441,11 @@ int main()
 	//yapper(tweets, senators);
 
 	//PART III
+	freq_bar(tweets, sen_name);
+
+	//alternative: user input search terms
+	string name;
+	cout << "Enter senator name: ";
+    getline(cin, name);
+	freq_bar(tweets, name);
 }
