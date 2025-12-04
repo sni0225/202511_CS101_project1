@@ -354,12 +354,71 @@ void yapper(const vector<vector<string>>& tweets, const vector<string>& senators
 //TO DO 3: EXTRA CREDIT
 //idea: print a visual representation of a senator's tweeting frequency by month
 
+string find_start(vector<vector<string>> tweets, string senator);
+
+string find_start(vector<vector<string>> tweets, string senator){
+	for(size_t row = 0; row < tweets.size(); row++){
+
+		if (tweets[row][3] == senator){		//if senator name matches
+			return tweets[row][2].substr(0, 7);
+		}
+	}
+}
+
+string find_end(vector<vector<string>> tweets, string senator);
+
+string find_end(vector<vector<string>> tweets, string senator){
+	string end = "0000-00";
+	for(size_t row = 0; row < tweets.size(); row++){
+
+		if (tweets[row][3] == senator){		//if senator name matches
+			if(tweets[row][2] > end){
+				end = tweets[row][2];
+			}
+		}
+	}
+	return end.substr(0, 7);
+}
+
+vector<string> month_vec(vector<vector<string>> tweets, string senator);
+
+vector<string> month_vec(vector<vector<string>> tweets, string senator){
+
+	vector<string> months;
+	bool isInVec = false;
+	for(size_t row = 0; row < tweets.size(); row++){
+		isInVec = false;
+		if (tweets[row][3] == senator){		//if senator name matches
+			string curr = tweets[row][2].substr(0, 7);
+			for(size_t m = 0; m < months.size(); m++){
+				if(curr == months[m]){
+					isInVec = true;
+				}
+			}
+			if(!isInVec){
+				months.push_back(curr);
+				cout << curr << " ";
+			}
+		}
+	}
+	return months;
+}
+
 void freq_bar(vector<vector<string>> tweets, string senator);
 
 void freq_bar(vector<vector<string>> tweets, string senator){
 	//make a string vector of months?
-	//fixed range or user provide?
 	//maybe loop through tweets[row][2] to look for earliest and latest and generate month vector?
+
+	for(size_t row = 0; row < tweets.size(); row++){
+
+		if (tweets[row][3] == senator){		//if senator name matches
+
+		}
+
+	}
+
+
 
 	//loop through rows of tweets
 		//look for senator name match in tweets[3]
@@ -397,5 +456,7 @@ int main()
     */
 
     //PART II-3
-	yapper(tweets, senators);
+	//yapper(tweets, senators);
+
+	//PART III
 }
